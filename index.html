@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Downloader</title>
+    <title>YouTube Video Downloader</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,69 +12,86 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
-        .download-container {
+        .container {
             background: rgba(255, 255, 255, 0.1);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
             backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 100%;
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .success-message {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .download-section {
+            text-align: center;
         }
         .download-button {
             display: inline-block;
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
             color: white;
             padding: 12px 25px;
-            font-size: 16px;
             text-decoration: none;
             border-radius: 6px;
-            transition: 0.3s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            transition: transform 0.3s;
         }
         .download-button:hover {
-            background: linear-gradient(135deg, #ff4b2b, #ff416c);
             transform: scale(1.05);
         }
-        p {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
     </style>
-    <script>
-        // Add this script to handle local development
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const API_BASE_URL = isLocalhost ? 'http://localhost:5000' : 'https://bigdaddyaman.github.io/YTBot';
-        
-        async function downloadVideo() {
-            const urlInput = document.getElementById('videoUrl').value;
-            try {
-                const response = await fetch(`${API_BASE_URL}/download?url=${encodeURIComponent(urlInput)}`);
-                const data = await response.json();
-                if (data.status === 'success') {
-                    window.location.href = `${API_BASE_URL}/downloads/${data.file_name}`;
-                } else {
-                    alert('Download failed: ' + data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Download failed. Please try again.');
-            }
-        }
-    </script>
 </head>
 <body>
-    <div class="download-container">
+    <div class="container">
         <h1>YouTube Video Downloader</h1>
-        <input type="text" id="videoUrl" placeholder="Enter video URL" />
-        <button onclick="downloadVideo()" class="download-button">Download Video</button>
-        <div id="status"></div>
+        <div class="download-section">
+            <p>Please use our Telegram bot to download videos:</p>
+            <a href="https://t.me/your_bot_username" class="download-button">Open Telegram Bot</a>
+        </div>
+        <div id="error-container"></div>
     </div>
+
+    <script>
+        // Check if there's an error parameter in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const success = urlParams.get('success');
+
+        if (error) {
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.textContent = decodeURIComponent(error);
+            errorContainer.appendChild(errorMessage);
+        }
+
+        if (success) {
+            const errorContainer = document.getElementById('error-container');
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = decodeURIComponent(success);
+            errorContainer.appendChild(successMessage);
+        }
+    </script>
 </body>
 </html>
