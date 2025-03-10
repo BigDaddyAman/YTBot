@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Video</title>
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fileUrl = urlParams.get('url');
+            if (fileUrl) {
+                window.location.href = fileUrl;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Redirecting to download...</h1>
+    <p>If you are not redirected automatically, <a id="download-link" href="#">click here</a>.</p>
+</body>
+</html>
