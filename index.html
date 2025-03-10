@@ -47,17 +47,34 @@
             margin-bottom: 15px;
         }
     </style>
+    <script>
+        // Add this script to handle local development
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const API_BASE_URL = isLocalhost ? 'http://localhost:5000' : 'https://bigdaddyaman.github.io/YTBot';
+        
+        async function downloadVideo() {
+            const urlInput = document.getElementById('videoUrl').value;
+            try {
+                const response = await fetch(`${API_BASE_URL}/download?url=${encodeURIComponent(urlInput)}`);
+                const data = await response.json();
+                if (data.status === 'success') {
+                    window.location.href = `${API_BASE_URL}/downloads/${data.file_name}`;
+                } else {
+                    alert('Download failed: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Download failed. Please try again.');
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="download-container">
-        <h1>Download Your Video</h1>
-        {% if filename %}
-            <p>Your file is ready for download:</p>
-            <p><strong>{{ filename }}</strong></p>
-            <a href="{{ url_for('download_file', filename=filename) }}" class="download-button">Download Now</a>
-        {% else %}
-            <p>No file specified for download.</p>
-        {% endif %}
+        <h1>YouTube Video Downloader</h1>
+        <input type="text" id="videoUrl" placeholder="Enter video URL" />
+        <button onclick="downloadVideo()" class="download-button">Download Video</button>
+        <div id="status"></div>
     </div>
 </body>
 </html>
